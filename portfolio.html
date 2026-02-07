@@ -1,0 +1,783 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portfolio</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #00d4ff;
+            --secondary: #6b1bd9;
+            --accent: #ff006e;
+            --light: #fafafa;
+            --light-alt: #ffffff;
+            --text: #1a1a1a;
+            --text-dim: #6b6b6b;
+            --border: #e0e0e0;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            line-height: 1.6;
+            color: var(--text);
+            background: var(--light);
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        /* Navigation */
+        .nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 1.2rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .nav-brand {
+            font-size: 1.5rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: var(--text);
+            font-weight: 500;
+            transition: color 0.3s ease;
+            position: relative;
+            cursor: pointer;
+        }
+
+        .nav-links a:hover {
+            color: var(--primary);
+        }
+
+        .nav-links a.active {
+            color: var(--primary);
+        }
+
+        /* Main Content */
+        .main-content {
+            padding-top: 80px;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 4rem 2rem;
+        }
+
+        /* Page Sections */
+        .page-section {
+            display: none;
+        }
+
+        .page-section.active {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Menu */
+        .menu {
+            background: var(--light-alt);
+            border-radius: 12px;
+            padding: 2rem;
+            margin-bottom: 3rem;
+            border: 1px solid var(--border);
+        }
+
+        .menu-title {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            color: var(--text);
+        }
+
+        .submenu {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .submenu-btn {
+            padding: 0.8rem 1.5rem;
+            background: var(--light);
+            border: 2px solid var(--border);
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 500;
+            color: var(--text);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .submenu-btn:hover {
+            background: var(--light-alt);
+            border-color: var(--primary);
+            color: var(--primary);
+        }
+
+        .submenu-btn.active {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+
+        /* Category Sections */
+        .category-section {
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .category-section.active {
+            display: block;
+        }
+
+        .category-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 3rem;
+            text-align: center;
+            position: relative;
+            display: inline-block;
+            width: 100%;
+        }
+
+        .category-title::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 4px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            border-radius: 2px;
+        }
+
+        /* Grid - Masonry Style for Moodboard */
+        .grid {
+            columns: 3 300px;
+            column-gap: 1rem;
+        }
+
+        /* Simple Image Display */
+        .project-card {
+            break-inside: avoid;
+            margin-bottom: 1rem;
+            cursor: pointer;
+        }
+
+        .project-image {
+            width: 100%;
+        }
+
+        .project-image img {
+            width: 100%;
+            height: auto;
+            display: block;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .project-image img:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+        }
+
+        .project-info {
+            display: none;
+        }
+
+        /* Social Media Page Styles */
+        .header-section {
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+
+        .page-title {
+            font-size: 3rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            position: relative;
+            display: inline-block;
+        }
+
+        .page-title::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 4px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            border-radius: 2px;
+        }
+
+        .content-section {
+            background: var(--light-alt);
+            border-radius: 12px;
+            padding: 3rem;
+            margin-bottom: 4rem;
+            border: 1px solid var(--border);
+        }
+
+        .content-section h2 {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            color: var(--text);
+        }
+
+        .content-section h3 {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin: 2rem 0 1rem;
+            color: var(--text);
+        }
+
+        .content-section h4 {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin: 1.5rem 0 0.8rem;
+            color: var(--text);
+        }
+
+        .content-section p {
+            margin-bottom: 1.5rem;
+            color: var(--text);
+            font-size: 1.05rem;
+            line-height: 1.8;
+        }
+
+        .content-section ul {
+            margin-bottom: 1.5rem;
+            padding-left: 2rem;
+        }
+
+        .content-section li {
+            margin-bottom: 0.8rem;
+            color: var(--text);
+            font-size: 1.05rem;
+            line-height: 1.8;
+        }
+
+        .content-section strong {
+            color: var(--text);
+            font-weight: 600;
+        }
+
+        .portfolio-section {
+            margin-top: 4rem;
+        }
+
+        .section-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 3rem;
+            text-align: center;
+            position: relative;
+            display: inline-block;
+            width: 100%;
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 4px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            border-radius: 2px;
+        }
+
+        .image-label {
+            padding: 0.8rem;
+            background: var(--light-alt);
+            font-size: 0.9rem;
+            color: var(--text-dim);
+            text-align: center;
+            border-top: 1px solid var(--border);
+        }
+
+        .add-work-section {
+            margin-top: 3rem;
+            padding: 2rem;
+            background: var(--light);
+            border: 2px dashed var(--border);
+            border-radius: 12px;
+            text-align: center;
+        }
+
+        .add-work-section h3 {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            color: var(--text-dim);
+        }
+
+        .add-work-section p {
+            color: var(--text-dim);
+            font-size: 1rem;
+        }
+
+        /* Lightbox */
+        .lightbox {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            z-index: 9999;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .lightbox.active {
+            display: flex;
+        }
+
+        .lightbox img {
+            max-width: 90%;
+            max-height: 90%;
+            object-fit: contain;
+        }
+
+        .lightbox-close {
+            position: absolute;
+            top: 20px;
+            right: 40px;
+            font-size: 40px;
+            color: white;
+            cursor: pointer;
+            background: none;
+            border: none;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .nav-container {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .nav-links {
+                gap: 1rem;
+            }
+
+            .container {
+                padding: 2rem 1rem;
+            }
+
+            .category-title {
+                font-size: 2rem;
+            }
+
+            .page-title {
+                font-size: 2rem;
+            }
+
+            .section-title {
+                font-size: 2rem;
+            }
+
+            .content-section {
+                padding: 2rem 1.5rem;
+            }
+
+            .grid {
+                columns: 2 200px;
+                column-gap: 0.75rem;
+            }
+
+            .project-card {
+                margin-bottom: 0.75rem;
+            }
+
+            .submenu {
+                flex-direction: column;
+            }
+
+            .submenu-btn {
+                width: 100%;
+                text-align: center;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .grid {
+                columns: 1;
+            }
+
+            .page-title {
+                font-size: 1.75rem;
+            }
+
+            .content-section {
+                padding: 1.5rem 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="nav">
+        <div class="nav-container">
+            <div class="nav-brand">Ed's Portfolio</div>
+            <ul class="nav-links">
+                <li><a data-page="designs" class="active">Designs</a></li>
+                <li><a data-page="social-media">Social Media</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <div class="container">
+            <!-- DESIGNS PAGE -->
+            <div id="designs-page" class="page-section active">
+                <!-- Menu -->
+                <div class="menu">
+                    <h2 class="menu-title">Design</h2>
+                    <div class="submenu">
+                        <button class="submenu-btn active" data-category="info-designs">Info Designs</button>
+                        <button class="submenu-btn" data-category="logo-designs">Logo Designs</button>
+                    </div>
+                </div>
+
+                <!-- Info Designs Section -->
+                <section id="info-designs" class="category-section active">
+                    <h2 class="category-title">Info Designs</h2>
+                    <div class="grid">
+                        <div class="project-card">
+                            <div class="project-image">
+                                <img src="Design%20Files%20and%20Content/Info%20Content/Artboard%201.png" alt="Info Design">
+                            </div>
+                        </div>
+                        <div class="project-card">
+                            <div class="project-image">
+                                <img src="Design%20Files%20and%20Content/Info%20Content/Artboard%201Catalogue%202026.png" alt="Info Design">
+                            </div>
+                        </div>
+                        <div class="project-card">
+                            <div class="project-image">
+                                <img src="Design%20Files%20and%20Content/Info%20Content/Artboard%201jordan.png" alt="Info Design">
+                            </div>
+                        </div>
+                        <div class="project-card">
+                            <div class="project-image">
+                                <img src="Design%20Files%20and%20Content/Info%20Content/banner.png" alt="Info Design">
+                            </div>
+                        </div>
+                        <div class="project-card">
+                            <div class="project-image">
+                                <img src="Design%20Files%20and%20Content/Info%20Content/HAPPY%20NEW%20YEAR.png" alt="Info Design">
+                            </div>
+                        </div>
+                        <div class="project-card">
+                            <div class="project-image">
+                                <img src="Design%20Files%20and%20Content/Info%20Content/logoArtboard%201%20copyFGFGFG.png" alt="Info Design">
+                            </div>
+                        </div>
+                        <div class="project-card">
+                            <div class="project-image">
+                                <img src="Design%20Files%20and%20Content/Info%20Content/logoArtboard%201FGFGFG.png" alt="Info Design">
+                            </div>
+                        </div>
+                        <div class="project-card">
+                            <div class="project-image">
+                                <img src="Design%20Files%20and%20Content/Info%20Content/NTR%20CLUB%20EFFECT.png" alt="Info Design">
+                            </div>
+                        </div>
+                        <div class="project-card">
+                            <div class="project-image">
+                                <img src="Design%20Files%20and%20Content/Info%20Content/RHSArtboard%201%20copy.png" alt="Info Design">
+                            </div>
+                        </div>
+                        <div class="project-card">
+                            <div class="project-image">
+                                <img src="Design%20Files%20and%20Content/Info%20Content/RHSArtboard%201.png" alt="Info Design">
+                            </div>
+                        </div>
+                        <div class="project-card">
+                            <div class="project-image">
+                                <img src="Design%20Files%20and%20Content/Info%20Content/RHSArtboard%201y.png" alt="Info Design">
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Logo Designs Section -->
+                <section id="logo-designs" class="category-section">
+                    <h2 class="category-title">Logo Designs</h2>
+                    <div class="grid">
+                        <div class="project-card">
+                            <div class="project-image">
+                                <img src="Design%20Files%20and%20Content/Logo%20Marks/Artboard%201WWDF%20sfdffTransparent.png" alt="Logo Design">
+                            </div>
+                        </div>
+                        <div class="project-card">
+                            <div class="project-image">
+                                <img src="Design%20Files%20and%20Content/Logo%20Marks/Artboard%202.png" alt="Logo Design">
+                            </div>
+                        </div>
+                        <div class="project-card">
+                            <div class="project-image">
+                                <img src="Design%20Files%20and%20Content/Logo%20Marks/LOGOArtboard%201%20copyigcoversds.png" alt="Logo Design">
+                            </div>
+                        </div>
+                        <div class="project-card">
+                            <div class="project-image">
+                                <img src="Design%20Files%20and%20Content/Logo%20Marks/RHSArtboard%201%20copy%202.png" alt="Logo Design">
+                            </div>
+                        </div>
+                        <div class="project-card">
+                            <div class="project-image">
+                                <img src="Design%20Files%20and%20Content/Logo%20Marks/RHSArtboard%201%20copy.png" alt="Logo Design">
+                            </div>
+                        </div>
+                        <div class="project-card">
+                            <div class="project-image">
+                                <img src="Design%20Files%20and%20Content/Logo%20Marks/RHSArtboard%201.png" alt="Logo Design">
+                            </div>
+                        </div>
+                        <div class="project-card">
+                            <div class="project-image">
+                                <img src="Design%20Files%20and%20Content/Logo%20Marks/RHSArtboard%201NS.png" alt="Logo Design">
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+
+            <!-- SOCIAL MEDIA PAGE -->
+            <div id="social-media-page" class="page-section">
+                <!-- Header -->
+                <div class="header-section">
+                    <h1 class="page-title">Social Media Management</h1>
+                </div>
+
+                <!-- Written Content -->
+                <div class="content-section">
+                    <h2>Overview</h2>
+                    <p>As a social media manager, I've developed and executed comprehensive social media strategies across multiple platforms including Instagram, Pinterest, TikTok, and Facebook. My work focuses on creating engaging content, building community, and driving measurable results for brands.</p>
+
+                    <h3>Key Responsibilities</h3>
+                    <ul>
+                        <li><strong>Content Strategy & Planning:</strong> Develop content calendars aligned with brand goals and audience insights</li>
+                        <li><strong>Community Management:</strong> Engage with followers, respond to comments and messages, and foster authentic relationships</li>
+                        <li><strong>Analytics & Reporting:</strong> Track performance metrics, analyze data, and optimize strategies based on insights</li>
+                        <li><strong>Platform Management:</strong> Manage multiple social media accounts ensuring consistent brand voice and visual identity</li>
+                        <li><strong>Trend Monitoring:</strong> Stay current with social media trends and platform updates to maintain competitive advantage</li>
+                    </ul>
+
+                    <h3>Platforms & Tools</h3>
+                    <p>I work across various social media platforms and utilize professional tools to maximize efficiency and results:</p>
+                    <ul>
+                        <li><strong>Primary Platforms:</strong> Instagram, Pinterest, TikTok, Facebook</li>
+                        <li><strong>Analytics Tools:</strong> Native platform insights, Google Analytics integration</li>
+                        <li><strong>Content Creation:</strong> Canva, Adobe Creative Suite for graphics and video editing</li>
+                        <li><strong>Scheduling & Management:</strong> Buffer, Later, or native scheduling tools</li>
+                    </ul>
+
+                    <h3>Achievements & Results</h3>
+                    <ul>
+                        <li>Increased follower engagement rates across all managed platforms</li>
+                        <li>Developed viral content campaigns that significantly boosted brand awareness</li>
+                        <li>Successfully launched and grew multiple brand accounts from inception</li>
+                        <li>Created cohesive visual identities that strengthened brand recognition</li>
+                        <li>Implemented data-driven strategies that improved content performance</li>
+                    </ul>
+                </div>
+
+                <!-- Current Projects Section -->
+                <div class="content-section" style="background: linear-gradient(135deg, rgba(0, 212, 255, 0.05), rgba(107, 27, 217, 0.05)); border: 2px solid var(--primary);">
+                    <h2 style="background: linear-gradient(135deg, var(--primary), var(--secondary)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;">Current Social Media & Digital Marketing Projects</h2>
+                    
+                    <h3>Aggie Carpet Cleaning</h3>
+                    <ul>
+                        <li>Managing and growing the company's Facebook, Instagram, and Nextdoor accounts with consistent, locally targeted content.</li>
+                        <li>Designing, writing, and managing paid advertisements across social platforms to drive lead generation and service bookings.</li>
+                        <li>Currently developing a customer newsletter system for past clients to reduce churn, increase repeat business, and make upselling of additional services more effective.</li>
+                        <li>Developing a new website to improve brand credibility, user experience, and overall conversion rates.</li>
+                    </ul>
+
+                    <h3>Greenfingers Wildlife Initiative</h3>
+                    <ul>
+                        <li>Currently monitoring and reviewing existing social media content performance across platforms.</li>
+                        <li>Identifying opportunities to better structure content for clarity, consistency, and storytelling.</li>
+                        <li>Developing strategies to improve reach, engagement, and audience growth through refined content formats and posting frameworks.</li>
+                        <li>Exploring ways to align content with the organization's conservation goals while making it more accessible and shareable.</li>
+                    </ul>
+                </div>
+
+                <!-- Portfolio Section -->
+                <div class="portfolio-section">
+                    <h2 class="section-title">Social Media Work & Analytics</h2>
+                    
+                    <div class="grid">
+                        <!-- Analytics Screenshots -->
+                        <div class="project-card">
+                            <div class="project-image">
+                                <img src="SOCIALPROOF/analytics.png" alt="Social Media Analytics Dashboard">
+                            </div>
+                            <div class="image-label">Analytics Dashboard</div>
+                        </div>
+
+                        <div class="project-card">
+                            <div class="project-image">
+                                <img src="SOCIALPROOF/gumroad%20analytics.png" alt="Gumroad Analytics">
+                            </div>
+                            <div class="image-label">Gumroad Analytics</div>
+                        </div>
+
+                        <div class="project-card">
+                            <div class="project-image">
+                                <img src="SOCIALPROOF/herbivore.png" alt="Herbivore Campaign">
+                            </div>
+                            <div class="image-label">Herbivore</div>
+                        </div>
+
+                        <div class="project-card">
+                            <div class="project-image">
+                                <img src="SOCIALPROOF/personal%20pinterest%20analytics.png" alt="Personal Pinterest Analytics">
+                            </div>
+                            <div class="image-label">Personal Pinterest Analytics</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Lightbox -->
+    <div id="lightbox" class="lightbox">
+        <button class="lightbox-close">&times;</button>
+        <img id="lightbox-img" src="" alt="">
+    </div>
+
+    <script>
+        // Page Navigation
+        const navLinks = document.querySelectorAll('.nav-links a');
+        const pages = document.querySelectorAll('.page-section');
+
+        navLinks.forEach(link => {
+            link.addEventListener('click', (e) => {
+                e.preventDefault();
+                const targetPage = link.getAttribute('data-page');
+                
+                // Remove active from all nav links
+                navLinks.forEach(l => l.classList.remove('active'));
+                link.classList.add('active');
+                
+                // Hide all pages
+                pages.forEach(page => page.classList.remove('active'));
+                
+                // Show target page
+                document.getElementById(targetPage + '-page').classList.add('active');
+            });
+        });
+
+        // Category switching (for design page)
+        const submenuBtns = document.querySelectorAll('.submenu-btn');
+        const categorySections = document.querySelectorAll('.category-section');
+
+        submenuBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                // Remove active class from all buttons
+                submenuBtns.forEach(b => b.classList.remove('active'));
+                // Add active class to clicked button
+                btn.classList.add('active');
+
+                // Hide all sections
+                categorySections.forEach(section => section.classList.remove('active'));
+                // Show selected section
+                const category = btn.getAttribute('data-category');
+                document.getElementById(category).classList.add('active');
+            });
+        });
+
+        // Smooth scroll for navigation
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // Lightbox functionality
+        const lightbox = document.getElementById('lightbox');
+        const lightboxImg = document.getElementById('lightbox-img');
+        const lightboxClose = document.querySelector('.lightbox-close');
+        const projectImages = document.querySelectorAll('.project-image img');
+
+        projectImages.forEach(img => {
+            img.addEventListener('click', () => {
+                lightbox.classList.add('active');
+                lightboxImg.src = img.src;
+            });
+        });
+
+        lightboxClose.addEventListener('click', () => {
+            lightbox.classList.remove('active');
+        });
+
+        lightbox.addEventListener('click', (e) => {
+            if (e.target === lightbox) {
+                lightbox.classList.remove('active');
+            }
+        });
+    </script>
+</body>
+</html>
